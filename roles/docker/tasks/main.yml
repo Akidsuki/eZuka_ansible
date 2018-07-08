@@ -1,15 +1,25 @@
 ---
-- name: install docker
-  yum:
-    name: docker
-    state: latest
+- name: install dependencies for docker
+  yum: name={{ item }} state=latest
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
+  
+- name: add repo docker-ce
+  shell: "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
+  args:
+    chdir: "/etc/yum.repos.d"
+    creates: docker-ce.repo
 
-- name: install epel-release
+- name: install docker-ce
   yum:
-    name: epel-release
+    name: docker-ce
+    state: present
 
-- name: epel install docker-compose
-  yum:
-    name: docker-compose
-    state: latest
-    enablerepo: epel
+- name: restart docker service
+  systemd:
+    name: docker.service
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
