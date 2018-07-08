@@ -1,0 +1,11 @@
+---
+- name: yum update
+  become: yes
+  yum: name=* state=latest
+
+- name: change timezone to Asia/Tokyo
+  become: yes
+  file: src=/usr/share/zoneinfo/Asia/Tokyo dest=/etc/localtime state=link force=true
+
+- name: install vim
+  yum: name=vim state=latest
