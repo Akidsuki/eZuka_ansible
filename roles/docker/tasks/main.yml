@@ -23,3 +23,9 @@
     state: restarted
     daemon_reload: yes
     enabled: yes
+
+- name: install docker-compose
+  shell: "curl -L https://github.com/docker/compose/releases/download/1.21.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose"
+
+- name: add execution permission
+  command: 'sudo chmod +x /usr/local/bin/docker-compose'
